@@ -5,7 +5,6 @@ import { SendMessageResponse, TermiiModuleOptions } from './interfaces';
 import { TERMII_BASE_URL, TERMII_MODULE_OPTIONS } from './common';
 import { SendMessageDto } from './dtos';
 
-
 @Injectable()
 export class TermiiService {
   private readonly apiKey: string;
@@ -15,7 +14,7 @@ export class TermiiService {
   constructor(
     @Inject(TERMII_MODULE_OPTIONS)
     private readonly options: TermiiModuleOptions,
-    private readonly httpService: HttpService,
+    private readonly httpService: HttpService
   ) {
     this.apiKey = this.options.apiKey;
     this.senderId = this.options.senderId;
@@ -31,7 +30,7 @@ export class TermiiService {
 
     const data: any = {
       api_key: this.apiKey,
-      to: payload.to.join(','),
+      to: payload.to,
       from: this.senderId,
       sms: payload.sms,
       type: payload.type || 'plain',
@@ -43,7 +42,7 @@ export class TermiiService {
     }
 
     const response = await firstValueFrom(
-      this.httpService.post<SendMessageResponse>(url, data),
+      this.httpService.post<SendMessageResponse>(url, data)
     );
 
     return response.data;

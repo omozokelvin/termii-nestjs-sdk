@@ -8,9 +8,9 @@ import {
   ArrayMinSize,
   ValidateIf,
   ValidateNested,
+  ArrayMaxSize,
 } from 'class-validator';
 import { MediaDto } from './media.dto';
-
 
 export class SendMessageDto {
   /**
@@ -21,8 +21,9 @@ export class SendMessageDto {
   @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   @IsArray()
   @ArrayMinSize(1)
+  @ArrayMaxSize(100)
   @IsString({ each: true })
-  to: string[];
+  to: string | string[];
 
   /**
    * The message to be sent.
