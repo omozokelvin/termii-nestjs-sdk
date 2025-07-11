@@ -1,4 +1,3 @@
-
 export class SendMessageResponse {
   message_id: string;
   message: string;

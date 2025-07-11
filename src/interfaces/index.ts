@@ -1,2 +1,1 @@
-export * from './termii-options.interface';
-export * from './send-message.response'
+export * from './termii.interface';

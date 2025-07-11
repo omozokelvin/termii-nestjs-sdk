@@ -4,14 +4,17 @@ import {
   TermiiModuleOptions,
   TermiiOptionsFactory,
 } from './interfaces/termii.interface';
-
-import { TermiiService } from './termii.service'; // Assuming you have this service
 import { TERMII_MODULE_OPTIONS } from './common/constants';
+import { HttpModule } from '@nestjs/axios';
+import { MessagingService } from './messaging/messaging.service';
+import { TokenService } from './token/token.service';
+import { InsightsService } from './insights/insights.service';
 
 @Global()
 @Module({
-  providers: [TermiiService],
-  exports: [TermiiService],
+  imports: [HttpModule],
+  providers: [MessagingService, TokenService, InsightsService],
+  exports: [MessagingService, TokenService, InsightsService],
 })
 export class TermiiModule {
   public static forRoot(options: TermiiModuleOptions): DynamicModule {
@@ -48,6 +51,7 @@ export class TermiiModule {
     return [
       this.createAsyncOptionsProvider(options),
       ...(useClass ? [{ provide: useClass, useClass }] : []),
+      ...(useExisting ? [{ provide: useExisting, useExisting }] : []),
     ];
   }
 

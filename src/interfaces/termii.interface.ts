@@ -6,6 +6,7 @@ import { ModuleMetadata, Type } from '@nestjs/common';
 export interface TermiiModuleOptions {
   apiKey: string;
   senderId: string;
+  baseUrl?: string;
 }
 
 export interface TermiiOptionsFactory {
