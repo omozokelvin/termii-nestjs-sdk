@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { TERMII_MODULE_OPTIONS, TERMII_BASE_URL } from 'src/common';
-import { TermiiModuleOptions } from 'src/interfaces';
-import { SendTokenDto } from 'src/token/dtos';
+import { TERMII_BASE_URL, TERMII_MODULE_OPTIONS } from '../common';
+import { TermiiModuleOptions } from '../interfaces';
+import { SendTokenDto } from './dtos';
 
 @Injectable()
 export class TokenService {

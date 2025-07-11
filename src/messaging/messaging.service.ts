@@ -3,8 +3,9 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { TermiiModuleOptions } from '../interfaces';
 import { TERMII_BASE_URL, TERMII_MODULE_OPTIONS } from '../common';
-import { SendMessageDto } from './dtos/send-message.dto';
+import { SendMessageDto } from './dtos';
 import { SendMessageResponse } from './interfaces/send-message.response';
+import { TermiiSendMessagePayload } from './interfaces/send-message.payload';
 
 @Injectable()
 export class MessagingService {
@@ -22,17 +23,15 @@ export class MessagingService {
     this.baseUrl = this.options.baseUrl || TERMII_BASE_URL;
   }
 
-  /**
-   * Send a message using Termii API
-   * @param payload - The message payload
-   */
   async sendMessage(payload: SendMessageDto): Promise<SendMessageResponse> {
     const url = `${this.baseUrl}/api/sms/send`;
 
-    const data = {
+    const data: TermiiSendMessagePayload = {
       ...payload,
       api_key: this.apiKey,
       from: this.senderId,
+      type: payload.type || 'plain',
+      channel: payload.channel || 'generic',
     };
 
     const response = await firstValueFrom(
