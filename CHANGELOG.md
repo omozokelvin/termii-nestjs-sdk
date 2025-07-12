@@ -1,5 +1,11 @@
 # termii-nestjs
 
+## 5.0.0
+
+### Major Changes
+
+- removed unnecessary dependencies
+
 ## 4.1.0
 
 ### Minor Changes
