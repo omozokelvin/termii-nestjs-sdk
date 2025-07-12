@@ -1,2 +1,1 @@
-export * from './insight.service';
-export * from './response';
+export * from './responses';

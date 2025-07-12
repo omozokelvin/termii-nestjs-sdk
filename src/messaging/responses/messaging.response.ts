@@ -1,4 +1,4 @@
-import { TermiiRequestSenderIdRequest } from '../request';
+import { TermiiRequestSenderIdRequest } from '../requests';
 
 export interface TermiiBaseResponse {
   code: string;

@@ -1,5 +1,11 @@
 # termii-nestjs
 
+## 3.3.0
+
+### Minor Changes
+
+- Added implementations for insight apis
+
 ## 3.2.0
 
 ### Minor Changes

@@ -4,6 +4,7 @@ export interface TermiiMediaRequest {
 }
 
 export interface TermiiSendMessageRequest {
+  from: string;
   to: string | string[];
   sms: string;
   channel?: 'dnd' | 'whatsapp' | 'generic';

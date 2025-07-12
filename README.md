@@ -52,7 +52,6 @@ import { TermiiModule } from 'termii-nestjs';
   imports: [
     TermiiModule.forRoot({
       apiKey: 'YOUR_TERMII_API_KEY',
-      senderId: 'YOUR_SENDER_ID',
       // baseUrl: 'https://api.ng.termii.com' // Optional: Override base URL
     }),
   ],
@@ -77,7 +76,7 @@ import { TermiiModule } from 'termii-nestjs';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         apiKey: configService.get<string>('TERMII_API_KEY'),
-        senderId: configService.get<string>('TERMII_SENDER_ID'),
+        // baseUrl: 'https://api.ng.termii.com' // Optional: Override base URL
       }),
       inject: [ConfigService],
     }),
@@ -90,7 +89,7 @@ export class AppModule {}
 
 You can now inject `TermiiService` into any of your services or controllers. Below is an example of a `NotificationService` that handles sending different types of messages.
 
-#### Example: Sending a WhatsApp message with media
+#### Example: Sending an SMS
 
 ```typescript
 import { Injectable, Logger } from '@nestjs/common';
@@ -102,25 +101,20 @@ export class NotificationService {
 
   constructor(private readonly termiiService: TermiiService) {}
 
-  async sendWhatsAppInvoice(phoneNumber: string) {
+  async sendWelcomeMessage(phoneNumber: string) {
     const payload: TermiiSendMessageRequest = {
       to: phoneNumber,
-      sms: 'Here is your invoice for this month.', // Required text fallback
-      channel: 'whatsapp',
-      media: {
-        url: 'https://example.com/invoice.pdf',
-        caption: 'Monthly Invoice',
-      },
+      from: 'YourSenderID', // This will be the sender ID displayed on the recipient's device
+      sms: 'Hi there, welcome to our service!',
+      channel: 'generic', // Use 'generic' for SMS, 'dnd' to bypass DND, or 'whatsapp'
     };
 
     try {
       const response = await this.termiiService.messaging.sendMessage(payload);
-      this.logger.log(
-        `WhatsApp message sent. Message ID: ${response.message_id}`
-      );
+      this.logger.log(`Message sent. Message ID: ${response.message_id}`);
     } catch (error) {
       this.logger.error(
-        'Failed to send WhatsApp message',
+        'Failed to send SMS',
         error.response?.data || error.message
       );
     }

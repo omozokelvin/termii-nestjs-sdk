@@ -11,7 +11,7 @@ import {
   TermiiSendTemplateRequest,
   TermiiCreatePhoneBookRequest,
   TermiiUpdatePhoneBookRequest,
-} from './request';
+} from './requests';
 import {
   TermiiFetchSenderIdsResponse,
   TermiiRequestSenderIdResponse,
@@ -23,12 +23,12 @@ import {
   TermiiCreatePhoneBookResponse,
   TermiiUpdatePhoneBookResponse,
   TermiiDeletePhoneBookResponse,
-} from './response';
+} from './responses';
 
 @Injectable()
 export class MessagingService {
   private readonly apiKey: string;
-  private readonly senderId: string;
+  // private readonly senderId: string;
   private readonly baseUrl: string;
 
   constructor(
@@ -37,7 +37,7 @@ export class MessagingService {
     private readonly httpService: HttpService
   ) {
     this.apiKey = this.options.apiKey;
-    this.senderId = this.options.senderId;
+    // this.senderId = this.options.senderId;
     this.baseUrl = this.options.baseUrl || TERMII_BASE_URL;
   }
 
@@ -88,10 +88,9 @@ export class MessagingService {
 
     const to = Array.isArray(recipients) ? recipients : [recipients];
 
-    const data: TermiiSendMessageRequest & { api_key: string; from: string } = {
+    const data: TermiiSendMessageRequest & { api_key: string } = {
       ...restOfPayload,
       api_key: this.apiKey,
-      from: this.senderId,
       to,
       type,
       channel,
@@ -114,7 +113,6 @@ export class MessagingService {
     const data: TermiiSendMessageRequest & { api_key: string; from: string } = {
       ...restOfPayload,
       api_key: this.apiKey,
-      from: this.senderId,
       type,
       channel,
     };
