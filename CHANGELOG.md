@@ -1,10 +1,10 @@
 # termii-nestjs
 
-## 1.1.0
+## 4.0.0
 
-### Minor Changes
+### Major Changes
 
-- Added service apis for messaging, insights and token
+- Added MESSAGE, INSIGHTS AND TOKEN APIs
 
 ## 3.3.0
 
