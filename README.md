@@ -94,7 +94,7 @@ You can now inject `TermiiService` into any of your services or controllers. Bel
 
 ```typescript
 import { Injectable, Logger } from '@nestjs/common';
-import { TermiiService, SendMessageRequest } from 'termii-nestjs';
+import { TermiiService, TermiiSendMessageRequest } from 'termii-nestjs';
 
 @Injectable()
 export class NotificationService {
@@ -103,7 +103,7 @@ export class NotificationService {
   constructor(private readonly termiiService: TermiiService) {}
 
   async sendWhatsAppInvoice(phoneNumber: string) {
-    const payload: SendMessageRequest = {
+    const payload: TermiiSendMessageRequest = {
       to: phoneNumber,
       sms: 'Here is your invoice for this month.', // Required text fallback
       channel: 'whatsapp',
