@@ -1,6 +1,6 @@
-import { SendMessageDto } from '../dtos';
+import { TermiiSendMessageDto } from '../dtos';
 
-export interface TermiiSendMessagePayload extends SendMessageDto {
+export interface TermiiSendMessagePayload extends TermiiSendMessageDto {
   api_key: string;
   from: string;
 }

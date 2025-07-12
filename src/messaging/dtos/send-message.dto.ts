@@ -1,6 +1,6 @@
-import { MediaDto } from './media.dto';
+import { TermiiMediaDto } from './media.dto';
 
-export class SendMessageDto {
+export class TermiiSendMessageDto {
   to: string | string[];
 
   sms: string;
@@ -9,5 +9,5 @@ export class SendMessageDto {
 
   type?: 'plain';
 
-  media?: MediaDto;
+  media?: TermiiMediaDto;
 }

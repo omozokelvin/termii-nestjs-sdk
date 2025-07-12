@@ -3,7 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { TermiiModuleOptions } from '../interfaces';
 import { TERMII_BASE_URL, TERMII_MODULE_OPTIONS } from '../common';
-import { BalanceResponse } from './interfaces';
+import { TermiiBalanceResponse } from './interfaces';
 
 @Injectable()
 export class InsightService {
@@ -22,11 +22,11 @@ export class InsightService {
   /**
    * Get the account balance
    */
-  async getBalance(): Promise<BalanceResponse> {
+  async getBalance(): Promise<TermiiBalanceResponse> {
     const url = `${this.baseUrl}/api/get-balance`;
 
     const response = await firstValueFrom(
-      this.httpService.get<BalanceResponse>(url, {
+      this.httpService.get<TermiiBalanceResponse>(url, {
         params: { api_key: this.apiKey },
       })
     );

@@ -1,4 +1,4 @@
-export class MediaDto {
+export class TermiiMediaDto {
   url: string;
 
   caption: string;

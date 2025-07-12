@@ -1,13 +1,13 @@
-import { RequestSenderIdDto } from '../../messaging/dtos';
+import { TermiiRequestSenderIdDto } from '../../messaging/dtos';
 
-export class SenderId extends RequestSenderIdDto {
+export class TemiiSenderId extends TermiiRequestSenderIdDto {
   status: string;
   created_at: string;
 }
 
-export interface FetchSenderIdsResponse {
+export interface TermiiFetchSenderIdsResponse {
   current_page: 1;
-  data: SenderId[];
+  data: TemiiSenderId[];
   first_page_url: string;
   from: number;
   last_page: number;

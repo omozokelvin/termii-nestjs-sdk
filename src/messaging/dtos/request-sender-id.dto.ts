@@ -1,4 +1,4 @@
-export class RequestSenderIdDto {
+export class TermiiRequestSenderIdDto {
   sender_id: string;
 
   usecase: string;

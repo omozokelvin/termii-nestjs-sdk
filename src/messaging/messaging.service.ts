@@ -3,11 +3,11 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { TermiiModuleOptions } from '../interfaces';
 import { TERMII_BASE_URL, TERMII_MODULE_OPTIONS } from '../common';
-import { RequestSenderIdDto, SendMessageDto } from './dtos';
+import { TermiiRequestSenderIdDto, TermiiSendMessageDto } from './dtos';
 import {
-  FetchSenderIdsResponse,
-  RequestSenderIdResponse,
-  SendMessageResponse,
+  TermiiFetchSenderIdsResponse,
+  TemiiRequestSenderIdResponse,
+  TermiiSendMessageResponse,
   TermiiSendMessagePayload,
 } from './interfaces';
 
@@ -27,11 +27,11 @@ export class MessagingService {
     this.baseUrl = this.options.baseUrl || TERMII_BASE_URL;
   }
 
-  async fetchSenderId(): Promise<FetchSenderIdsResponse> {
+  async fetchSenderId(): Promise<TermiiFetchSenderIdsResponse> {
     const url = `${this.baseUrl}/api/sender-id`;
 
     const response = await firstValueFrom(
-      this.httpService.get<FetchSenderIdsResponse>(url, {
+      this.httpService.get<TermiiFetchSenderIdsResponse>(url, {
         params: { api_key: this.apiKey },
       })
     );
@@ -40,8 +40,8 @@ export class MessagingService {
   }
 
   async requestSenderId(
-    payload: RequestSenderIdDto
-  ): Promise<RequestSenderIdResponse> {
+    payload: TermiiRequestSenderIdDto
+  ): Promise<TemiiRequestSenderIdResponse> {
     const url = `${this.baseUrl}/api/sender-id/request`;
 
     const data = {
@@ -50,13 +50,15 @@ export class MessagingService {
     };
 
     const response = await firstValueFrom(
-      this.httpService.post<RequestSenderIdResponse>(url, data)
+      this.httpService.post<TemiiRequestSenderIdResponse>(url, data)
     );
 
     return response.data;
   }
 
-  async sendMessage(payload: SendMessageDto): Promise<SendMessageResponse> {
+  async sendMessage(
+    payload: TermiiSendMessageDto
+  ): Promise<TermiiSendMessageResponse> {
     const url = `${this.baseUrl}/api/sms/send`;
 
     const {
@@ -78,7 +80,7 @@ export class MessagingService {
     };
 
     const response = await firstValueFrom(
-      this.httpService.post<SendMessageResponse>(url, data)
+      this.httpService.post<TermiiSendMessageResponse>(url, data)
     );
 
     return response.data;

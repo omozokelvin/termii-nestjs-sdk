@@ -1,4 +1,4 @@
-export interface BalanceResponse {
+export interface TermiiBalanceResponse {
   user: string;
   balance: number;
   currency: string;
