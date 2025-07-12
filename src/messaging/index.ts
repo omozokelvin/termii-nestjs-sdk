@@ -1,3 +1,2 @@
-export * from './messaging.service';
-export * from './dtos';
-export * from './interfaces';
+export * from './requests';
+export * from './responses';

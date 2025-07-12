@@ -3,18 +3,32 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { TermiiModuleOptions } from '../interfaces';
 import { TERMII_BASE_URL, TERMII_MODULE_OPTIONS } from '../common';
-import { RequestSenderIdDto, SendMessageDto } from './dtos';
 import {
-  ListSenderIdsResponse,
-  RequestSenderIdResponse,
-  SendMessageResponse,
-  TermiiSendMessagePayload,
-} from './interfaces';
+  TermiiRequestSenderIdRequest,
+  TermiiSendBulkMessageRequest,
+  TermiiSendMessageRequest,
+  TermiiSendNumberMessageRequest,
+  TermiiSendTemplateRequest,
+  TermiiCreatePhoneBookRequest,
+  TermiiUpdatePhoneBookRequest,
+} from './requests';
+import {
+  TermiiFetchSenderIdsResponse,
+  TermiiRequestSenderIdResponse,
+  TermiiSendMessageResponse,
+  TermiiSendBulkMessageResponse,
+  TermiiSendNumberMessageResponse,
+  TermiiSendTemplateResponse,
+  TermiiFetchPhoneBooksResponse,
+  TermiiCreatePhoneBookResponse,
+  TermiiUpdatePhoneBookResponse,
+  TermiiDeletePhoneBookResponse,
+} from './responses';
 
 @Injectable()
 export class MessagingService {
   private readonly apiKey: string;
-  private readonly senderId: string;
+  // private readonly senderId: string;
   private readonly baseUrl: string;
 
   constructor(
@@ -23,11 +37,46 @@ export class MessagingService {
     private readonly httpService: HttpService
   ) {
     this.apiKey = this.options.apiKey;
-    this.senderId = this.options.senderId;
+    // this.senderId = this.options.senderId;
     this.baseUrl = this.options.baseUrl || TERMII_BASE_URL;
   }
 
-  async sendMessage(payload: SendMessageDto): Promise<SendMessageResponse> {
+  // Sender ID API
+
+  async fetchSenderId(): Promise<TermiiFetchSenderIdsResponse> {
+    const url = `${this.baseUrl}/api/sender-id`;
+
+    const response = await firstValueFrom(
+      this.httpService.get<TermiiFetchSenderIdsResponse>(url, {
+        params: { api_key: this.apiKey },
+      })
+    );
+
+    return response.data;
+  }
+
+  async requestSenderId(
+    payload: TermiiRequestSenderIdRequest
+  ): Promise<TermiiRequestSenderIdResponse> {
+    const url = `${this.baseUrl}/api/sender-id/request`;
+
+    const data = {
+      ...payload,
+      api_key: this.apiKey,
+    };
+
+    const response = await firstValueFrom(
+      this.httpService.post<TermiiRequestSenderIdResponse>(url, data)
+    );
+
+    return response.data;
+  }
+
+  // Messaging API
+
+  async sendMessage(
+    payload: TermiiSendMessageRequest
+  ): Promise<TermiiSendMessageResponse> {
     const url = `${this.baseUrl}/api/sms/send`;
 
     const {
@@ -39,26 +88,67 @@ export class MessagingService {
 
     const to = Array.isArray(recipients) ? recipients : [recipients];
 
-    const data: TermiiSendMessagePayload = {
+    const data: TermiiSendMessageRequest & { api_key: string } = {
       ...restOfPayload,
       api_key: this.apiKey,
-      from: this.senderId,
       to,
       type,
       channel,
     };
 
     const response = await firstValueFrom(
-      this.httpService.post<SendMessageResponse>(url, data)
+      this.httpService.post<TermiiSendMessageResponse>(url, data)
     );
 
     return response.data;
   }
 
-  async requestSenderId(
-    payload: RequestSenderIdDto
-  ): Promise<RequestSenderIdResponse> {
-    const url = `${this.baseUrl}/api/sender-id/request`;
+  async sendBulkMessage(
+    payload: TermiiSendBulkMessageRequest
+  ): Promise<TermiiSendBulkMessageResponse> {
+    const url = `${this.baseUrl}/api/sms/send/bulk`;
+
+    const { type = 'plain', channel = 'generic', ...restOfPayload } = payload;
+
+    const data: TermiiSendMessageRequest & { api_key: string; from: string } = {
+      ...restOfPayload,
+      api_key: this.apiKey,
+      type,
+      channel,
+    };
+
+    const response = await firstValueFrom(
+      this.httpService.post<TermiiSendBulkMessageResponse>(url, data)
+    );
+
+    return response.data;
+  }
+
+  // Number API
+
+  async sendNumberMessage(
+    payload: TermiiSendNumberMessageRequest
+  ): Promise<TermiiSendNumberMessageResponse> {
+    const url = `${this.baseUrl}/api/sms/number/send`;
+
+    const data: TermiiSendNumberMessageRequest & { api_key: string } = {
+      ...payload,
+      api_key: this.apiKey,
+    };
+
+    const response = await firstValueFrom(
+      this.httpService.post<TermiiSendNumberMessageResponse>(url, data)
+    );
+
+    return response.data;
+  }
+
+  // Templates API
+
+  async sendTemplate(
+    payload: TermiiSendTemplateRequest
+  ): Promise<TermiiSendTemplateResponse> {
+    const url = `${this.baseUrl}/api/send/template`;
 
     const data = {
       ...payload,
@@ -66,17 +156,68 @@ export class MessagingService {
     };
 
     const response = await firstValueFrom(
-      this.httpService.post<RequestSenderIdResponse>(url, data)
+      this.httpService.post<TermiiSendTemplateResponse>(url, data)
     );
 
     return response.data;
   }
 
-  async listSenderIds(): Promise<ListSenderIdsResponse> {
-    const url = `${this.baseUrl}/api/sender-id`;
+  // Campaign API
+
+  async fetchPhoneBooks(): Promise<TermiiFetchPhoneBooksResponse> {
+    const url = `${this.baseUrl}/api/phonebooks`;
 
     const response = await firstValueFrom(
-      this.httpService.get<ListSenderIdsResponse>(url, {
+      this.httpService.get<TermiiFetchPhoneBooksResponse>(url, {
+        params: { api_key: this.apiKey },
+      })
+    );
+
+    return response.data;
+  }
+
+  async createPhoneBook(
+    payload: TermiiCreatePhoneBookRequest
+  ): Promise<TermiiCreatePhoneBookResponse> {
+    const url = `${this.baseUrl}/api/phonebooks`;
+
+    const data = {
+      ...payload,
+      api_key: this.apiKey,
+    };
+
+    const response = await firstValueFrom(
+      this.httpService.post<TermiiCreatePhoneBookResponse>(url, data)
+    );
+
+    return response.data;
+  }
+
+  async updatePhoneBook(
+    phonebookId: string,
+    payload: TermiiUpdatePhoneBookRequest
+  ): Promise<TermiiUpdatePhoneBookResponse> {
+    const url = `${this.baseUrl}/api/phonebooks/${phonebookId}`;
+
+    const data = {
+      ...payload,
+      api_key: this.apiKey,
+    };
+
+    const response = await firstValueFrom(
+      this.httpService.patch<TermiiUpdatePhoneBookResponse>(url, data)
+    );
+
+    return response.data;
+  }
+
+  async deletePhoneBook(
+    phonebookId: string
+  ): Promise<TermiiDeletePhoneBookResponse> {
+    const url = `${this.baseUrl}/api/phonebooks/${phonebookId}`;
+
+    const response = await firstValueFrom(
+      this.httpService.delete<TermiiDeletePhoneBookResponse>(url, {
         params: { api_key: this.apiKey },
       })
     );
