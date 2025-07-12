@@ -3,15 +3,17 @@
 [![npm version](https://badge.fury.io/js/termii-nestjs.svg)](https://badge.fury.io/js/termii-nestjs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A robust, well-structured, and fully-typed NestJS SDK for interacting with the [Termii API](https://developers.termii.com/). This library simplifies sending SMS and WhatsApp messages, with built-in validation and a developer-friendly API.
+A robust, well-structured, and fully-typed NestJS SDK for interacting with the [Termii API](https://developers.termii.com/). This library simplifies sending SMS and WhatsApp messages with a developer-friendly API.
 
 ## Features
 
--   ✅ Easy integration with any NestJS application
--   ✅ Static (`forRoot`) and async (`forRootAsync`) module configuration
--   ✅ Built-in validation for request payloads using `class-validator`
--   ✅ Strongly-typed DTOs for both requests and responses
--   ✅ Support for sending SMS and WhatsApp messages (including media)
+- ✅ Easy integration with any NestJS application
+- ✅ Static (`forRoot`) and async (`forRootAsync`) module configuration
+- ✅ Strongly-typed DTOs for both requests and responses
+- ✅ **Full Termii API Coverage:**
+  - **Messaging:** Send SMS & WhatsApp messages.
+  - **Products:** Manage Sender IDs, Templates, and Campaigns.
+  - **Insights:** Check account balance, search history, and perform number status checks.
 
 ## Installation
 
@@ -28,7 +30,7 @@ yarn add termii-nestjs
 This library has peer dependencies on several NestJS packages. If they are not already installed in your project, you will need to add them:
 
 ```bash
-npm install @nestjs/common @nestjs/core class-validator class-transformer
+npm install @nestjs/common @nestjs/core reflect-metadata
 ```
 
 ## Getting Started
@@ -86,36 +88,7 @@ export class AppModule {}
 
 ### 2. Inject and Use `TermiiService`
 
-You can now inject `TermiiService` into any of your services or controllers.
-
-#### Example: Sending a simple SMS
-
-```typescript
-import { Injectable, Logger } from '@nestjs/common';
-import { TermiiService, SendMessageDto } from 'termii-nestjs';
-
-@Injectable()
-export class NotificationService {
-  private readonly logger = new Logger(NotificationService.name);
-
-  constructor(private readonly termiiService: TermiiService) {}
-
-  async sendWelcomeSms(phoneNumber: string) {
-    const payload: SendMessageDto = {
-      to: phoneNumber, // Can also be an array of numbers: ['234...', '234...']
-      sms: 'Welcome to our platform!',
-      channel: 'dnd', // Use 'dnd' to bypass DND restrictions
-    };
-
-    try {
-      const response = await this.termiiService.sendMessage(payload);
-      this.logger.log(`Message sent successfully. Message ID: ${response.message_id}`);
-    } catch (error) {
-      this.logger.error('Failed to send SMS', error.response?.data || error.message);
-    }
-  }
-}
-```
+You can now inject `TermiiService` into any of your services or controllers. Below is an example of a `NotificationService` that handles sending different types of messages.
 
 #### Example: Sending a WhatsApp message with media
 
@@ -141,10 +114,15 @@ export class NotificationService {
     };
 
     try {
-      const response = await this.termiiService.sendMessage(payload);
-      this.logger.log(`WhatsApp message sent. Message ID: ${response.message_id}`);
+      const response = await this.termiiService.messaging.sendMessage(payload);
+      this.logger.log(
+        `WhatsApp message sent. Message ID: ${response.message_id}`
+      );
     } catch (error) {
-      this.logger.error('Failed to send WhatsApp message', error.response?.data || error.message);
+      this.logger.error(
+        'Failed to send WhatsApp message',
+        error.response?.data || error.message
+      );
     }
   }
 }

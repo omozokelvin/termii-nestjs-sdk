@@ -15,7 +15,7 @@ import { TermiiService } from './termii.service';
 @Module({
   imports: [HttpModule],
   providers: [MessagingService, TokenService, InsightService, TermiiService],
-  exports: [TermiiService],
+  exports: [MessagingService, TokenService, InsightService, TermiiService],
 })
 export class TermiiModule {
   public static forRoot(options: TermiiModuleOptions): DynamicModule {
