@@ -8,13 +8,14 @@ import { TERMII_MODULE_OPTIONS } from './common/constants';
 import { HttpModule } from '@nestjs/axios';
 import { MessagingService } from './messaging/messaging.service';
 import { TokenService } from './token/token.service';
-import { InsightsService } from './insights/insights.service';
+import { InsightService } from './insight/insight.service';
+import { TermiiService } from './termii.service';
 
 @Global()
 @Module({
   imports: [HttpModule],
-  providers: [MessagingService, TokenService, InsightsService],
-  exports: [MessagingService, TokenService, InsightsService],
+  providers: [MessagingService, TokenService, InsightService, TermiiService],
+  exports: [TermiiService],
 })
 export class TermiiModule {
   public static forRoot(options: TermiiModuleOptions): DynamicModule {

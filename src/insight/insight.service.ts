@@ -6,7 +6,7 @@ import { TERMII_BASE_URL, TERMII_MODULE_OPTIONS } from '../common';
 import { BalanceResponse } from './interfaces';
 
 @Injectable()
-export class InsightsService {
+export class InsightService {
   private readonly apiKey: string;
   private readonly baseUrl: string;
 

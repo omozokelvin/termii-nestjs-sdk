@@ -1,9 +1,10 @@
 export * from './termii.module';
 
 // Re-export from feature modules
-export * from './messaging';
+export * from './termii.service';
 export * from './token';
-export * from './insights';
+export * from './insight';
+export * from './messaging';
 
 // Re-export shared interfaces
 export * from './interfaces';

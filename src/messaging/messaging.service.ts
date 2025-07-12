@@ -30,13 +30,20 @@ export class MessagingService {
   async sendMessage(payload: SendMessageDto): Promise<SendMessageResponse> {
     const url = `${this.baseUrl}/api/sms/send`;
 
-    // Destructure for clarity and to set default values.
-    const { type = 'plain', channel = 'generic', ...restOfPayload } = payload;
+    const {
+      type = 'plain',
+      channel = 'generic',
+      to: recipients,
+      ...restOfPayload
+    } = payload;
+
+    const to = Array.isArray(recipients) ? recipients : [recipients];
 
     const data: TermiiSendMessagePayload = {
       ...restOfPayload,
       api_key: this.apiKey,
       from: this.senderId,
+      to,
       type,
       channel,
     };
