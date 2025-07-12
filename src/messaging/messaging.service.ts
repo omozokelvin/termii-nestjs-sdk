@@ -5,7 +5,7 @@ import { TermiiModuleOptions } from '../interfaces';
 import { TERMII_BASE_URL, TERMII_MODULE_OPTIONS } from '../common';
 import { RequestSenderIdDto, SendMessageDto } from './dtos';
 import {
-  ListSenderIdsResponse,
+  FetchSenderIdsResponse,
   RequestSenderIdResponse,
   SendMessageResponse,
   TermiiSendMessagePayload,
@@ -25,6 +25,35 @@ export class MessagingService {
     this.apiKey = this.options.apiKey;
     this.senderId = this.options.senderId;
     this.baseUrl = this.options.baseUrl || TERMII_BASE_URL;
+  }
+
+  async fetchSenderId(): Promise<FetchSenderIdsResponse> {
+    const url = `${this.baseUrl}/api/sender-id`;
+
+    const response = await firstValueFrom(
+      this.httpService.get<FetchSenderIdsResponse>(url, {
+        params: { api_key: this.apiKey },
+      })
+    );
+
+    return response.data;
+  }
+
+  async requestSenderId(
+    payload: RequestSenderIdDto
+  ): Promise<RequestSenderIdResponse> {
+    const url = `${this.baseUrl}/api/sender-id/request`;
+
+    const data = {
+      ...payload,
+      api_key: this.apiKey,
+    };
+
+    const response = await firstValueFrom(
+      this.httpService.post<RequestSenderIdResponse>(url, data)
+    );
+
+    return response.data;
   }
 
   async sendMessage(payload: SendMessageDto): Promise<SendMessageResponse> {
@@ -50,35 +79,6 @@ export class MessagingService {
 
     const response = await firstValueFrom(
       this.httpService.post<SendMessageResponse>(url, data)
-    );
-
-    return response.data;
-  }
-
-  async requestSenderId(
-    payload: RequestSenderIdDto
-  ): Promise<RequestSenderIdResponse> {
-    const url = `${this.baseUrl}/api/sender-id/request`;
-
-    const data = {
-      ...payload,
-      api_key: this.apiKey,
-    };
-
-    const response = await firstValueFrom(
-      this.httpService.post<RequestSenderIdResponse>(url, data)
-    );
-
-    return response.data;
-  }
-
-  async listSenderIds(): Promise<ListSenderIdsResponse> {
-    const url = `${this.baseUrl}/api/sender-id`;
-
-    const response = await firstValueFrom(
-      this.httpService.get<ListSenderIdsResponse>(url, {
-        params: { api_key: this.apiKey },
-      })
     );
 
     return response.data;
