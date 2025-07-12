@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { TERMII_BASE_URL, TERMII_MODULE_OPTIONS } from '../common';
 import { TermiiModuleOptions } from '../interfaces';
-import { SendTokenDto } from './dtos';
+import { SendTokenRequest } from './request';
 
 @Injectable()
 export class TokenService {
@@ -22,7 +22,7 @@ export class TokenService {
    * Send a one-time-password token to a user
    * @param payload - The token payload
    */
-  async sendToken(payload: SendTokenDto): Promise<any> {
+  async sendToken(payload: SendTokenRequest): Promise<any> {
     // TODO: Implement Termii Token API call
     console.log('Sending token:', payload);
     return Promise.resolve();

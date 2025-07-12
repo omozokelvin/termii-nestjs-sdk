@@ -1,5 +1,11 @@
 # termii-nestjs
 
+## 3.2.0
+
+### Minor Changes
+
+- Completed all the Message Products API
+
 ## 3.1.0
 
 ### Minor Changes

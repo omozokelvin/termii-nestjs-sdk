@@ -3,7 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { TermiiModuleOptions } from '../interfaces';
 import { TERMII_BASE_URL, TERMII_MODULE_OPTIONS } from '../common';
-import { TermiiBalanceResponse } from './interfaces';
+import { TermiiBalanceResponse } from './response';
 
 @Injectable()
 export class InsightService {
