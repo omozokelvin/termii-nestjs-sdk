@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { MessagingService } from 'src/messaging';
-import { InsightService } from 'src/insight';
-import { TokenService } from 'src/token';
+import { MessagingService } from './messaging';
+import { InsightService } from './insight';
+import { TokenService } from './token';
 
 @Injectable()
 export class TermiiService {
