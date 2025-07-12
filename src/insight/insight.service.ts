@@ -19,9 +19,6 @@ export class InsightService {
     this.baseUrl = this.options.baseUrl || TERMII_BASE_URL;
   }
 
-  /**
-   * Get the account balance
-   */
   async getBalance(): Promise<TermiiBalanceResponse> {
     const url = `${this.baseUrl}/api/get-balance`;
 
